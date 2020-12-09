@@ -1,25 +1,6 @@
 const {gql} = require('apollo-server')
 
 const typeDefs = gql`
-    type GetAll{
-        Movie{
-            _id: ID
-            title: String
-            overview: String
-            poster_path: String
-            popularity: Float
-            tags: [String]
-        }
-        series{
-            _id: ID
-            title: String
-            overview: String
-            poster_path: String
-            popularity: Float
-            tags: [String]
-    }
-}
-
     type Movie{
         _id: ID
         title: String
@@ -39,7 +20,6 @@ const typeDefs = gql`
     }
 
     type Query {
-        getAll: [Movie, Series]
         movies: [Movie]
         movieById(_id: ID!): Movie
         series: [Series]
