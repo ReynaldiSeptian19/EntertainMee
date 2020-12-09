@@ -4,6 +4,8 @@ import { Movies } from "../queries/movie/queryMovie";
 import { DeleteMovie } from "../queries/movie/mutationMovie";
 import { Fade } from "react-awesome-reveal";
 import { Link } from "react-router-dom";
+import { favourites } from "../cache/index"
+
 
 export default function Movie() {
   const { data } = useQuery(Movies);
@@ -12,6 +14,10 @@ export default function Movie() {
   const [deleteMovie] = useMutation(DeleteMovie, {
     refetchQueries: [{ query: Movies }],
   });
+
+  function handleAddFavourite(movie){
+    favourites([...favourites(), movie])
+  }
 
   function handleDelete(id) {
     deleteMovie({
@@ -50,6 +56,7 @@ export default function Movie() {
                       </Link>
                       <button
                         className="btn"
+                        onClick={() => handleAddFavourite(movie)}
                       >
                       <svg
                         width="1em"

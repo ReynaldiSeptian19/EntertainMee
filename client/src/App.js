@@ -5,6 +5,7 @@ import client from "./config/client";
 import Home from "./pages/home";
 import Movie from "./pages/movie"
 import Series from "./pages/series"
+import Favourite from "./pages/favorite"
 import DetailMovie from "./pages/detailMovie"
 import DetailSeries from "./pages/detailSeries"
 import CreateMovie from "./pages/addform";
@@ -37,6 +38,13 @@ function App() {
                 </a>
               </li>
               </Link>
+              <Link to={'/favourite'}>
+              <li class="nav-item active">
+                <a class="nav-link" href="#">
+                  My-Favourites
+                </a>
+              </li>
+              </Link>
               <Link to={'/addMovie'}>
               <li class="nav-item active">
                 <a class="nav-link" href="#">
@@ -56,6 +64,9 @@ function App() {
           </Route>
           <Route path="/series">
             <Series />
+          </Route>
+          <Route path="/favourite">
+            <Favourite />
           </Route>
           <Route path="/detailmovie/:id">
             <DetailMovie />

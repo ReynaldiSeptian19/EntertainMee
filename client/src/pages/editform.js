@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { EditMovie } from "../queries/movie/mutationMovie";
 import { GetAll, MovieById } from "../queries/movie/queryMovie";
 import { useParams, useHistory } from "react-router-dom"
+import Select from "react-select"
 
 export default function UpdateMovie() {
     const {id} = useParams()
     const history = useHistory()
+    const [tag, setTag] = useState([])
     const [input, setInput] = useState({
         title: "",
         overview: "",
@@ -14,9 +16,31 @@ export default function UpdateMovie() {
         popularity: 0,
         tags: [],
     });
+
+    const options = [
+        { value: 'Action', label: 'Action'},
+        { value: 'Animation', label: 'Animation'},
+        { value: 'Biography', label: 'Biography'},
+        { value: 'Comedy', label: 'Comedy'},
+        { value: 'Colossal', label: 'Colossal'},
+        { value: 'Drama', label: 'Drama'},
+        { value: 'Fantasy', label: 'Fantasy'},
+        { value: 'Fiction', label: 'Fiction'},
+        { value: 'Horror', label: 'Horror'},
+        { value: 'Romance', label: 'Romance'},
+    ]
+
     const [editMovie] = useMutation(EditMovie, {
         refetchQueries: [{ query: GetAll }],
     });
+
+    useEffect(()=>{
+        let currentTag
+        if(tag){
+          currentTag = tag.map(e => e.value)
+        }
+        setInput({...input, tags: currentTag})
+      }, [tag])
     
 
     useQuery(MovieById,{
@@ -41,7 +65,6 @@ export default function UpdateMovie() {
     let value = e.target.value;
     setInput({
       ...input,
-      [name]: name === "tags" ? [value] : value,
       [name]: name === "popularity" ? +value : value,
     });
   }
@@ -113,13 +136,14 @@ export default function UpdateMovie() {
           </div>
           <div class="form-group">
           <label>tags</label>
-          <input
-            type="text"
-            class="form-control"
-            onChange={(e) => handleInput(e)}
+          <Select
+            isMulti
             name="tags"
-            id="tags"
+            options={options}
+            className="basic-multi-select"
+            classNamePrefix="select"
             defaultValue={input.tags}
+            onChange={(tag) => setTag(tag)} 
           />
           </div>
         <button type="submit" class="btn btn-primary">

@@ -1,17 +1,23 @@
 import React from "react";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation} from "@apollo/client";
 import { GetAll } from "../queries/movie/queryMovie";
 import { DeleteMovie } from "../queries/movie/mutationMovie";
 import { Fade } from "react-awesome-reveal";
 import { Link } from "react-router-dom";
+import { favourites } from "../cache/index"
+
 
 export default function Home() {
   const { data } = useQuery(GetAll);
 
-  console.log(data);
+//   console.log(data);
   const [deleteMovie] = useMutation(DeleteMovie, {
     refetchQueries: [{ query: GetAll }],
   });
+
+  function handleAddFavourite(movie){
+    favourites([...favourites(), movie])
+  }
 
   function handleDelete(id) {
     deleteMovie({
@@ -46,11 +52,29 @@ export default function Home() {
                         </small>
                       </p>
                       <Link to={`/detailMovie/${movie._id}`}>
-                        <button className="btn btn-primary mr-4">
+                        <button className="btn btn-primary mr-3">
                           Detail
                         </button>
                         </Link>
-                      <button className='ml-4 btn' onClick={() => handleDelete(movie._id)}>
+                        <button
+                        className="btn"
+                        onClick={() => handleAddFavourite(movie)}
+                      >
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-heart-fill"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
+                        />
+                      </svg>
+                      </button>
+                      <button className='btn' onClick={() => handleDelete(movie._id)}>
                         <svg
                           width="1em"
                           height="1em"
